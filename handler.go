@@ -2,8 +2,6 @@ package main
 
 import (
 	"net/http"
-
-	"gopkg.in/yaml.v2"
 )
 
 // MapHandler will return an http.HandlerFunc (which also
@@ -33,21 +31,21 @@ func mapHandler(pathsToUrls map[string]string, fallback http.Handler) http.Handl
 //
 //     - path: /some-path
 //       url: https://www.some-url.com/demo
-func yamlHandler(yamldata []byte, fallback http.Handler) (http.HandlerFunc, error) {
-	var pathsToUrls []struct {
-		Path string `yaml:"path"`
-		URL  string `yaml:"url"`
-	}
-	if err := yaml.Unmarshal(yamldata, &pathsToUrls); err != nil {
-		return nil, err
-	}
-	return func(w http.ResponseWriter, r *http.Request) {
-		for _, pathtourl := range pathsToUrls {
-			if pathtourl.Path == r.URL.Path {
-				http.Redirect(w, r, pathtourl.URL, http.StatusFound)
-				return
-			}
-		}
-		fallback.ServeHTTP(w, r)
-	}, nil
-}
+// func yamlHandler(yamldata []byte, fallback http.Handler) (http.HandlerFunc, error) {
+// 	var pathsToUrls []struct {
+// 		Path string `yaml:"path"`
+// 		URL  string `yaml:"url"`
+// 	}
+// 	if err := yaml.Unmarshal(yamldata, &pathsToUrls); err != nil {
+// 		return nil, err
+// 	}
+// 	return func(w http.ResponseWriter, r *http.Request) {
+// 		for _, pathtourl := range pathsToUrls {
+// 			if pathtourl.Path == r.URL.Path {
+// 				http.Redirect(w, r, pathtourl.URL, http.StatusFound)
+// 				return
+// 			}
+// 		}
+// 		fallback.ServeHTTP(w, r)
+// 	}, nil
+// }
